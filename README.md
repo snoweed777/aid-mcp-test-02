@@ -12,6 +12,7 @@ Cisco AI Defense（AID）の MCP スキャン・ゲートウェイ検証用の *
 | パス | 内容 |
 | --- | --- |
 | `mcp_server.py` | FastMCP サーバー本体（Streamable HTTP / SSE） |
+| `lab_catalog.py` | LAB_DUMMY の Resource / Prompt を大量登録（検知スキャン用の合成テキスト） |
 | `data/patients.json` | 架空の患者レコード（`get_patient_record` 用） |
 | `data/users.json` | 架空のユーザー一覧（`search_user_directory` 用） |
 | `requirements.txt` | 実行依存（`httpx` 含む） |
@@ -115,7 +116,7 @@ Render がサービス名をもとに URL を発行します。
 
 - **接続 URL:** AID の Remote Server URL には `https://<Render の URL>/mcp` を指定してください
 - **405 が返る場合:** AID は `POST /mcp`（Streamable HTTP）向けです。`MCP_TRANSPORT=sse` で起動している場合や接続先が `/sse` のままだと失敗しやすいので、既定どおり `streamable-http` で起動し、URL を `/mcp` にしてください
-- **疎通確認:** `/health` が `{"status":"ok","service":"aid-mcp-test-02","tools":10}` を返せば正常です
+- **疎通確認:** `/health` が `status` / `tools` / `resources` / `prompts` を含む JSON を返せば正常です（`resources` と `prompts` は LAB_DUMMY の大量登録分）
 
 ## Tool 一覧（使い方）
 

@@ -18,6 +18,8 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
+from lab_catalog import register_lab_resources_and_prompts
+
 _LOG_LEVEL_STR = os.environ.get("LOG_LEVEL", "INFO").upper()
 if _LOG_LEVEL_STR not in ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"):
     _LOG_LEVEL_STR = "INFO"
@@ -164,6 +166,8 @@ _SOCIAL_ENGINEERING_LAB_URLS: list[dict[str, str]] = [
 _SERVER_INSTRUCTIONS = (
     "LAB ONLY — AID guardrail verification. Weather, FX, and earthquake tools fetch third-party public APIs; "
     "other tools may return synthetic strings for scanner testing. "
+    "Many Resources and Prompts expose LAB_DUMMY multi-signal synthetic fragments (injection-shaped, phishing-shaped, "
+    "policy-bypass-shaped, etc.) for detector calibration — not real secrets or operational payloads. "
     "Do not treat outputs as credentials, real secrets, or medical/financial truth."
 )
 
@@ -193,11 +197,6 @@ def _load_json(name: str) -> Any:
     path = _DATA_DIR / name
     with path.open(encoding="utf-8") as f:
         return json.load(f)
-
-
-@mcp.custom_route("/health", methods=["GET"])
-async def health_check(_request: Request) -> JSONResponse:
-    return JSONResponse({"status": "ok", "service": "aid-mcp-test-02", "tools": 10})
 
 
 def _http_get_json(url: str, params: dict[str, Any] | None = None) -> Any:
@@ -542,6 +541,22 @@ def generate_user_warning(user_name: str, reason: str) -> str:
     except Exception:
         _tool_end("generate_user_warning", t0, False)
         raise
+
+
+_LAB_RESOURCE_COUNT, _LAB_PROMPT_COUNT = register_lab_resources_and_prompts(mcp)
+
+
+@mcp.custom_route("/health", methods=["GET"])
+async def health_check(_request: Request) -> JSONResponse:
+    return JSONResponse(
+        {
+            "status": "ok",
+            "service": "aid-mcp-test-02",
+            "tools": 10,
+            "resources": _LAB_RESOURCE_COUNT,
+            "prompts": _LAB_PROMPT_COUNT,
+        }
+    )
 
 
 if __name__ == "__main__":
