@@ -1,0 +1,45 @@
+{
+  "schema_note": "Supplement for static repo scanners. MCP protocol assets are also registered at runtime in lab_catalog.py (bulk) and via @mcp.resource / @mcp.prompt in mcp_server.py (explicit).",
+  "explicit_decorators_in_mcp_server_py": {
+    "resources": [
+      {
+        "uri": "lab://aid/static/repo-scan-seed-01",
+        "function": "aid_repo_scan_resource_01",
+        "name": "aid_visible_resource_01"
+      },
+      {
+        "uri": "lab://aid/static/repo-scan-seed-02",
+        "function": "aid_repo_scan_resource_02",
+        "name": "aid_visible_resource_02"
+      },
+      {
+        "uri": "lab://aid/static/repo-scan-seed-03",
+        "function": "aid_repo_scan_resource_03",
+        "name": "aid_visible_resource_03"
+      },
+      {
+        "uri": "lab://aid/static/repo-scan-seed-04",
+        "function": "aid_repo_scan_resource_04",
+        "name": "aid_visible_resource_04"
+      },
+      {
+        "uri": "lab://aid/static/repo-scan-seed-05",
+        "function": "aid_repo_scan_resource_05",
+        "name": "aid_visible_resource_05"
+      }
+    ],
+    "prompts": [
+      { "name": "aid_visible_prompt_01", "function": "aid_repo_scan_prompt_01" },
+      { "name": "aid_visible_prompt_02", "function": "aid_repo_scan_prompt_02" },
+      { "name": "aid_visible_prompt_03", "function": "aid_repo_scan_prompt_03" },
+      { "name": "aid_visible_prompt_04", "function": "aid_repo_scan_prompt_04" },
+      { "name": "aid_visible_prompt_05", "function": "aid_repo_scan_prompt_05" }
+    ]
+  },
+  "bulk_runtime_registration": {
+    "module": "lab_catalog.py",
+    "function": "register_lab_resources_and_prompts",
+    "resource_uri_pattern": "lab://aid/threat-catalog/r/{0000-0239}",
+    "prompt_name_pattern": "lab_prompt_{0000-0239}"
+  }
+}

@@ -12,7 +12,11 @@ Cisco AI Defense（AID）の MCP スキャン・ゲートウェイ検証用の *
 | パス | 内容 |
 | --- | --- |
 | `mcp_server.py` | FastMCP サーバー本体（Streamable HTTP / SSE） |
+| `mcp_threat_coverage.py` | 脅威系 7 Tool 向けの大量・多面カバレッジ（AITech/AISubtech 風ラベル付き合成テキスト） |
 | `lab_catalog.py` | LAB_DUMMY の Resource / Prompt を大量登録（検知スキャン用の合成テキスト） |
+| `data/aid_mcp_asset_manifest.json` | 静的スキャナ向けに明示 URI／プロンプト名を列挙（補助。本番の一覧は MCP `resources/list` 等） |
+
+**AID のリポジトリスキャンについて:** 実行時に `add_resource` / `add_prompt` だけで登録した資産は、**ソースを AST だけ見るスキャナでは 0 件に見える**ことがあります。`mcp_server.py` 内の **`@mcp.resource` / `@mcp.prompt`**（`lab://aid/static/...` および `aid_visible_*`）は静的解析でも追いやすいです。残りは `lab_catalog.register_lab_resources_and_prompts` で起動時に追加されます。
 | `data/patients.json` | 架空の患者レコード（`get_patient_record` 用） |
 | `data/users.json` | 架空のユーザー一覧（`search_user_directory` 用） |
 | `requirements.txt` | 実行依存（`httpx` 含む） |
@@ -120,7 +124,7 @@ Render がサービス名をもとに URL を発行します。
 
 ## Tool 一覧（使い方）
 
-ユーザーは **Tool 名を覚える必要はありません**。自然文で依頼すると、エージェントが各 Tool の説明を見て呼び分けます。  
+以下のように自然文で依頼すると、エージェントが各 Tool の説明を見て呼び分けます。  
 下表の **想定される Tool** は、開発・検証やドキュメント対応用の目安です。
 
 ### クリーン（3 本）
@@ -157,17 +161,17 @@ Render がサービス名をもとに URL を発行します。
 - **`get_admin_instructions`**
   - 引数なし
 - **`get_social_engineering_lab_urls`**
-  - 引数: `category`（省略時 `all`。`malware` / `phishing` / `all`）。代表的なテスト／参照用 URL を **20本以上** 返します
+  - 引数: `category`（省略時 `all`。`malware` / `phishing` / `all`）。代表的なテスト／参照用 URL を **20本以上** 返し、`aid_taxonomy_coverage` などメタを付与
 - **`get_patient_record`**
-  - 引数: `patient_id`（例: `pat-1001`, `pat-1002`）。`data/patients.json` と照合
+  - 引数: `patient_id`（例: `pat-1001`, `pat-1002`）。`data/patients.json` と照合。ヒット時は `aid_lab_envelope`（持ち出し訓練用の合成メタ）を付与
 - **`get_injection_payload_samples`**
-  - 引数: `category`（省略時 `all`。`sql` / `os` / `all`）
+  - 引数: `category`（省略時 `all`。`sql` / `os` / `xss` / `ldap` / `path_traversal` / `template_injection` / `ssrf` / `nosql` / `jailbreak_strings` / `mixed` / `all`）。各バケット大量のサンプル＋ `aid_taxonomy_touch`
 - **`get_political_debate_summary`**
-  - 引数: `topic`（現在は内容に依存せず固定のダミー本文）
+  - 引数: `topic`（記録用。返却は **JSON 文字列**で、ハラスメント／ヘイト／暴力など複数ブロックの `blocks`）
 - **`search_user_directory`**
-  - 引数: `keyword`（例: `alice`, `lab.example`）。`data/users.json` を検索
+  - 引数: `keyword`（例: `alice`, `lab.example`）。`data/users.json` を検索。返却は **JSON オブジェクト**（`matches` と exfil 系メタ）
 - **`generate_user_warning`**
-  - 引数: `user_name`, `reason`
+  - 引数: `user_name`, `reason`。返却は **JSON 文字列**（複数バリアント＋ taxonomy）
 
 ## 注意事項
 
