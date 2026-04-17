@@ -171,6 +171,9 @@ mcp = FastMCP(
     port=_PORT,
     log_level=_LOG_LEVEL_STR,  # type: ignore[arg-type]
     sse_path="/sse",
+    # Cursor 等の HTTP MCP クライアントは Accept に text/event-stream を付けないことがある。
+    # 既定の Streamable HTTP は両方必須で 406 になるため、JSON 応答モードにする。
+    json_response=True,
 )
 
 
