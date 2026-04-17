@@ -81,8 +81,8 @@ _EICAR_LINE = (
     "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
 )
 
-_NUM_RESOURCES = 240
-_NUM_PROMPTS = 240
+_NUM_RESOURCES = 8
+_NUM_PROMPTS = 8
 
 
 def _resource_body(i: int) -> str:
