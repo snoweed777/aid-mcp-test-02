@@ -106,10 +106,6 @@ Render がサービス名をもとに URL を発行します。
 | ヘルスチェック | `/health` |
 | MCP（Streamable HTTP） | `/mcp` |
 
-**Cursor の `mcp.json` では** `url` に **`https://<サービス名>.onrender.com/mcp`** まで指定してください。ホスト名だけ・ルート `/` だけだと MCP ルートに届かず **404** になります。
-
-**Cursor で `Error POSTing to endpoint: Not Found` / 接続が不安定になる件:** MCP の Streamable HTTP 実装は、既定では `Accept` に `application/json` と `text/event-stream` の **両方**が必要です。一方でクライアントが JSON だけ送ると **406** になります。本サーバーは **`json_response=True`**（FastMCP）により、Cursor 側の一般的な `Accept` でも POST が通るようにしています。変更を反映したら **Render で再デプロイ**してください。
-
 ### 無料プランの注意事項
 
 - 一定時間アクセスがないとサービスがスリープし、次のアクセス時に起動まで時間がかかります
