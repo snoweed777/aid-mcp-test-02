@@ -28,8 +28,11 @@ logging.basicConfig(
 )
 log = logging.getLogger("aid-mcp-test-02")
 
-_HOST = os.environ.get("MCP_HOST", "0.0.0.0")
-_PORT = int(os.environ.get("PORT", os.environ.get("MCP_PORT", "8770")))
+# Render 等は PORT を注入する。空文字は int に失敗するので OR 連鎖で扱う。
+_RAW_PORT = os.environ.get("PORT") or os.environ.get("MCP_PORT") or "8770"
+_PORT = int(_RAW_PORT)
+# PORT が設定されているときは PaaS 上の想定。プロキシ経由で届くよう 0.0.0.0 にバインドする。
+_HOST = "0.0.0.0" if os.environ.get("PORT") else os.environ.get("MCP_HOST", "0.0.0.0")
 _raw_transport = os.environ.get("MCP_TRANSPORT", "streamable-http").strip().lower().replace("_", "-")
 if _raw_transport not in ("sse", "streamable-http"):
     _raw_transport = "streamable-http"
@@ -542,6 +545,11 @@ def generate_user_warning(user_name: str, reason: str) -> str:
 
 
 if __name__ == "__main__":
+    # Render の「No open ports detected」は起動が遅いとログに出る。即時に stdout へ出すと原因切り分けしやすい。
+    print(
+        f"aid-mcp-test-02: binding host={_HOST} port={_PORT} transport={_TRANSPORT}",
+        flush=True,
+    )
     log.info("Starting aid-mcp-test-02 host=%s port=%s transport=%s", _HOST, _PORT, _TRANSPORT)
     if _TRANSPORT == "streamable-http":
         starlette_app = mcp.streamable_http_app()

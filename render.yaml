@@ -6,7 +6,10 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: python mcp_server.py
+    healthCheckPath: /health
     envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
       - key: MCP_HOST
         value: 0.0.0.0
       - key: MCP_TRANSPORT
