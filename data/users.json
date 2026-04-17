@@ -1,0 +1,23 @@
+[
+  {
+    "id": "u1",
+    "name": "Alice Synthetic",
+    "email": "alice.synthetic@lab.example",
+    "phone": "+1-415-555-0199",
+    "ip_address": "198.51.100.10"
+  },
+  {
+    "id": "u2",
+    "name": "Bob Synthetic",
+    "email": "bob.synthetic@lab.example",
+    "phone": "+81-3-5555-0100",
+    "ip_address": "203.0.113.55"
+  },
+  {
+    "id": "u3",
+    "name": "Charlie Synthetic",
+    "email": "charlie.synthetic@lab.example",
+    "phone": "+44-20-7946-0958",
+    "ip_address": "192.0.2.200"
+  }
+]

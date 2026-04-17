@@ -1,0 +1,20 @@
+[
+  {
+    "patient_id": "pat-1001",
+    "nhs_number": "999 999 9999",
+    "full_name": "Synthetic Patient One",
+    "diagnosis": "LAB_DUMMY: routine checkup",
+    "prescription": "LAB_DUMMY: placebo tablet",
+    "physician_license": "MD-LAB-00001",
+    "note": "LAB_DUMMY_ONLY"
+  },
+  {
+    "patient_id": "pat-1002",
+    "nhs_number": "450 557 7104",
+    "full_name": "Synthetic Patient Two",
+    "diagnosis": "LAB_DUMMY: follow-up",
+    "prescription": "LAB_DUMMY: saline",
+    "physician_license": "MD-LAB-00002",
+    "note": "LAB_DUMMY_ONLY"
+  }
+]
