@@ -16,12 +16,3 @@ services:
         value: streamable-http
       - key: LOG_LEVEL
         value: INFO
-
-  - type: cron
-    name: aid-mcp-test-02-keepalive
-    runtime: python
-    region: singapore
-    plan: free
-    schedule: "*/14 * * * *"
-    buildCommand: pip install requests
-    startCommand: python -c "import requests, sys; r = requests.get('https://aid-mcp-test-02.onrender.com/health', timeout=60); print(r.status_code, r.text[:80]); sys.exit(0 if r.ok else 1)"
