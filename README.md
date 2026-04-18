@@ -145,7 +145,7 @@ echo "$(date '+%H:%M:%S') ping 送信..."
 curl -sS \
   -w "\n[HTTP %{http_code}] レスポンス時間: %{time_total}s\n" \
   --max-time 90 \
-  https://aid-mcp-test-02.onrender.com/health | python3 -m json.tool
+  https://*****.onrender.com/health | python3 -m json.tool
 echo "$(date '+%H:%M:%S') 確認完了"
 ```
 
