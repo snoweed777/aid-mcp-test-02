@@ -162,7 +162,7 @@ echo "$(date '+%H:%M:%S') 確認完了"
 起動完了を確実に待ちたい場合（スクリプト組み込み用）：
 
 ```bash
-until curl -sf --max-time 90 https://aid-mcp-test-02.onrender.com/health > /dev/null; do
+until curl -sf --max-time 90 https://*****.onrender.com/health > /dev/null; do
   echo "$(date '+%H:%M:%S') 起動待ち..."; sleep 5
 done && echo "✓ 起動完了"
 ```
